@@ -1,0 +1,23 @@
+{
+  "name": "vue3.0",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm -C play dev",
+    "doc:dev": "pnpm -C docs dev"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@zi-shui/components": "workspace:^",
+    "@zi-shui/theme-chalk": "workspace:^",
+    "@zi-shui/utils": "workspace:^",
+    "typescript": "^5.5.4",
+    "vue": "^3.4.34"
+  },
+  "devDependencies": {
+    "sass": "^1.77.8"
+  }
+}
