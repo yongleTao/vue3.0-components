@@ -23,5 +23,4 @@ const style = computed(() => {
     ...(props.color ? { color: props.color } : {})
   }
 })
-console.log(style.value)
 </script>
