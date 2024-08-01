@@ -7,7 +7,8 @@
         bem.is('leaf', node.isLeaf)
       ]" @click='handleExpand'>
         <z-icon size="25">
-          <Switcher />
+          <Switcher v-if="!isLoading" />
+          <Loading v-else />
         </z-icon>
       </span>
       <span>{{ node?.label }}</span>
@@ -18,8 +19,10 @@
 <script setup lang='ts'>
 import Switcher from './icon/Switcher'
 import ZIcon from '@zi-shui/components/icon'
+import Loading from './icon/Loading'
 import { treeNodeProps, treeNodeEmitts } from './tree'
 import { createNamespace } from '@zi-shui/utils/create';
+import { computed } from 'vue';
 defineOptions({
   name: "treeNode"
 });
@@ -29,4 +32,7 @@ const emit = defineEmits(treeNodeEmitts)
 function handleExpand() {
   emit('toggle', props.node)
 }
+const isLoading = computed(() => {
+  return props.loadingKeys?.has(props.node.key)
+})
 </script>

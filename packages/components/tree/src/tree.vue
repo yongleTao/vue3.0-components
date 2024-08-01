@@ -1,13 +1,13 @@
 <template>
   <div :class="bem.b()">
     <zTreeNode :node="node" v-for="node in flattenTree" :key="node.key" :expanded="isExpanded(node)"
-      @toggle="toggleExpand" />
+      @toggle="toggleExpand" :loadingKeys='loadingKeysRef' />
   </div>
 </template>
 
 <script setup lang='ts'>
 import { computed, ref, watch } from 'vue';
-import { treeProps, TreeNode, TreeOption } from './tree'
+import { treeProps, TreeNode, TreeOption, key } from './tree'
 import { createNamespace } from '@zi-shui/utils/create';
 import zTreeNode from './treeNode.vue'
 defineOptions({
@@ -108,8 +108,30 @@ const flattenTree = computed(() => {
   return flattenNodes
 })
 
+// 默认展开的节点
 function isExpanded(node: TreeNode): boolean {
   return expandedKeysSet.value.has(node.key)
+}
+
+const loadingKeysRef = ref(new Set<key>())
+
+function triggerLoading(node: TreeNode) {
+  if (!node.children.length && !node.isLeaf) {
+    const loadingKeys = loadingKeysRef.value
+    const { onLoad } = props
+
+
+    if (!loadingKeys.has(node.key)) {
+      loadingKeys.add(node.key)
+      if (onLoad) {
+        onLoad(node.rawNode).then((children: TreeOption[]) => {
+          node.rawNode.children = children
+          node.children = createTree(children, node)
+          loadingKeys.delete(node.key)
+        })
+      }
+    }
+  }
 }
 
 // 折叠
@@ -119,13 +141,15 @@ function collpase(node: TreeNode) {
 
 // 展开
 function expand(node: TreeNode) {
+  triggerLoading(node)
+
   return expandedKeysSet.value.add(node.key)
 }
 
 // 切换展开事件
 function toggleExpand(node: TreeNode) {
   const expandKeys = expandedKeysSet.value
-  if (expandKeys.has(node.key)) {
+  if (expandKeys.has(node.key) && !loadingKeysRef.value.has(node.key)) {
     collpase(node)
   } else {
     expand(node)

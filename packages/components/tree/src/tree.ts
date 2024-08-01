@@ -39,7 +39,8 @@ const treeProps = {
   defaultCheckedKeys: {
     type: Array as PropType<key[]>,
     default: () => []
-  }
+  },
+  onLoad: Function as PropType<(node: TreeOption) => Promise<TreeOption[]>>
 } as const
 
 const treeNodeProps = {
@@ -50,6 +51,9 @@ const treeNodeProps = {
   expanded: {
     type: Boolean,
     required: true
+  },
+  loadingKeys: {
+    type: Object as PropType<Set<key>>
   }
 } as const
 type TreeProps = Partial<ExtractPropTypes<typeof treeProps>>
@@ -59,6 +63,7 @@ const treeNodeEmitts = {
 }
 
 export {
+  key,
   treeProps,
   TreeProps,
   TreeOption,
