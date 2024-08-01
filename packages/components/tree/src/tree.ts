@@ -35,9 +35,34 @@ const treeProps = {
   childrenField: {
     type: String,
     default: 'children'
+  },
+  defaultCheckedKeys: {
+    type: Array as PropType<key[]>,
+    default: () => []
   }
 } as const
 
+const treeNodeProps = {
+  node: {
+    type: Object as PropType<TreeNode>,
+    required: true
+  },
+  expanded: {
+    type: Boolean,
+    required: true
+  }
+} as const
 type TreeProps = Partial<ExtractPropTypes<typeof treeProps>>
 
-export { treeProps, TreeProps, TreeOption, TreeNode }
+const treeNodeEmitts = {
+  toggle: (node: TreeNode) => node
+}
+
+export {
+  treeProps,
+  TreeProps,
+  TreeOption,
+  TreeNode,
+  treeNodeProps,
+  treeNodeEmitts
+}
