@@ -4,28 +4,29 @@
   </z-icon> -->
 
 
-  <z-tree :data="data" :onLoad="handleLoad" />
+  <z-tree :data="data" :onLoad="handleLoad" v-model:sleected-keys="value" selectable multiple />
 </template>
 
 <script setup lang='ts'>
 import { ref } from 'vue';
-import { TreeOption } from '@zi-shui/components/tree/src/tree'
+import { TreeOption, key } from '@zi-shui/components/tree/src/tree'
 // import { Add } from '@vicons/ionicons5'
 defineOptions({
   name: "App"
 });
-// function createData(level = 4, parentKey = ''): any {
-//   if (!level) return []
-//   const arr = new Array(20 - level).fill(0)
-//   return arr.map((_, idx: number) => {
-//     const key = parentKey + level + idx
-//     return {
-//       xx: createLabel(level), // 显示的内容
-//       key, // 为了唯一性
-//       children: createData(level - 1, key) // 孩子
-//     }
-//   })
-// }
+function createData(level = 4, parentKey = ''): any {
+  if (!level) return []
+  const arr = new Array(20 - level).fill(0)
+  return arr.map((_, idx: number) => {
+    const key = parentKey + level + idx
+    return {
+      label: createLabel(level), // 显示的内容
+      key, // 为了唯一性
+      children: createData(level - 1, key) // 孩子
+    }
+  })
+}
+const value = ref<key[]>(['40'])
 function createLabel(level: number): string {
   if (level === 4) return '道生一'
   if (level === 3) return '一生二'
@@ -45,20 +46,20 @@ function nextLabel(currentLabel?: string | number): string {
   }
   return ''
 }
-function createData() {
-  return [
-    {
-      label: nextLabel(),
-      key: 1,
-      isLeaf: false
-    },
-    {
-      label: nextLabel(),
-      key: 2,
-      isLeaf: false
-    }
-  ]
-}
+// function createData() {
+//   return [
+//     {
+//       label: nextLabel(),
+//       key: 1,
+//       isLeaf: false
+//     },
+//     {
+//       label: nextLabel(),
+//       key: 2,
+//       isLeaf: false
+//     }
+//   ]
+// }
 const handleLoad = (node: TreeOption) => {
   // 每次实现懒加载时，会触发此方法，将当前点击的node传入
   return new Promise<TreeOption[]>((resolve) => {

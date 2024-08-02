@@ -1,13 +1,13 @@
 <template>
   <div :class="bem.b()">
     <zTreeNode :node="node" v-for="node in flattenTree" :key="node.key" :expanded="isExpanded(node)"
-      @toggle="toggleExpand" :loadingKeys='loadingKeysRef' />
+      @toggle="toggleExpand" :loadingKeys='loadingKeysRef' @handleSelect='hadleSelect' :selectedKeys="selectedKeys" />
   </div>
 </template>
 
 <script setup lang='ts'>
 import { computed, ref, watch } from 'vue';
-import { treeProps, TreeNode, TreeOption, key } from './tree'
+import { treeProps, TreeNode, TreeOption, key, treeEmits } from './tree'
 import { createNamespace } from '@zi-shui/utils/create';
 import zTreeNode from './treeNode.vue'
 defineOptions({
@@ -141,18 +141,49 @@ function collpase(node: TreeNode) {
 
 // 展开
 function expand(node: TreeNode) {
+  expandedKeysSet.value.add(node.key)
   triggerLoading(node)
-
-  return expandedKeysSet.value.add(node.key)
 }
 
 // 切换展开事件
 function toggleExpand(node: TreeNode) {
   const expandKeys = expandedKeysSet.value
+  // 如果当前这个节点 正在加载中，不能收起
   if (expandKeys.has(node.key) && !loadingKeysRef.value.has(node.key)) {
     collpase(node)
   } else {
     expand(node)
   }
+}
+
+
+// 实现选中节点
+const emit = defineEmits(treeEmits)
+const selectedKeys = ref<key[]>([])
+
+watch(() => props.sleectedKeys, value => {
+  if (value !== undefined) {
+    selectedKeys.value = value
+  }
+}, { immediate: true })
+
+function hadleSelect(node: TreeNode) {
+  let keys = Array.from(selectedKeys.value)
+  if (!props.selectable) return
+  if (props.multiple) {
+    const index = keys.findIndex(key => key === node.key)
+    if (index > -1) {
+      keys.splice(index, 1)
+    } else {
+      keys.push(node.key)
+    }
+  } else {
+    if (keys.includes(node.key)) {
+      keys = []
+    } else {
+      keys = [node.key]
+    }
+  }
+  emit('update:sleectedKeys', keys)
 }
 </script>

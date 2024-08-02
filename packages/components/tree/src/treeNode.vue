@@ -1,5 +1,5 @@
 <template>
-  <div :class="bem.b()">
+  <div :class="[bem.b(), bem.is('selected', isSelected!)]">
     <div :class="bem.e('content')" :style="{ paddingLeft: `${node.level * 16}px` }">
       <span :class="[
         bem.e('expand-icon'),
@@ -11,7 +11,7 @@
           <Loading v-else />
         </z-icon>
       </span>
-      <span>{{ node?.label }}</span>
+      <span @click="handleContentClick(node)">{{ node?.label }}</span>
     </div>
   </div>
 </template>
@@ -20,7 +20,7 @@
 import Switcher from './icon/Switcher'
 import ZIcon from '@zi-shui/components/icon'
 import Loading from './icon/Loading'
-import { treeNodeProps, treeNodeEmitts } from './tree'
+import { treeNodeProps, treeNodeEmitts, TreeNode } from './tree'
 import { createNamespace } from '@zi-shui/utils/create';
 import { computed } from 'vue';
 defineOptions({
@@ -35,4 +35,12 @@ function handleExpand() {
 const isLoading = computed(() => {
   return props.loadingKeys?.has(props.node.key)
 })
+const isSelected = computed(() => {
+  return props.selectedKeys.includes(props.node.key)
+})
+
+const handleContentClick = (node: TreeNode) => {
+  // 内容点击触发选择
+  emit('handleSelect', node)
+}
 </script>
