@@ -1,5 +1,5 @@
 <template>
-  <div :class="[bem.b(), bem.is('selected', isSelected!)]">
+  <div :class="[bem.b(), bem.is('selected', isSelected!), bem.is('disabled', node.disabled)]">
     <div :class="bem.e('content')" :style="{ paddingLeft: `${node.level * 16}px` }">
       <span :class="[
         bem.e('expand-icon'),
@@ -11,7 +11,10 @@
           <Loading v-else />
         </z-icon>
       </span>
-      <span @click="handleContentClick(node)">{{ node?.label }}</span>
+      <span @click="handleContentClick(node)">
+        <treeNodeContent :node="node" />
+        {{ node?.label }}
+      </span>
     </div>
   </div>
 </template>
@@ -20,9 +23,10 @@
 import Switcher from './icon/Switcher'
 import ZIcon from '@zi-shui/components/icon'
 import Loading from './icon/Loading'
-import { treeNodeProps, treeNodeEmitts, TreeNode } from './tree'
+import { treeNodeProps, treeNodeEmitts, TreeNode, treeInjectKey } from './tree'
 import { createNamespace } from '@zi-shui/utils/create';
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
+import treeNodeContent from './treeNodeContent';
 defineOptions({
   name: "treeNode"
 });
@@ -41,6 +45,9 @@ const isSelected = computed(() => {
 
 const handleContentClick = (node: TreeNode) => {
   // 内容点击触发选择
+  if (props.node.disabled) return
   emit('handleSelect', node)
 }
+
+const treeContext = inject(treeInjectKey)
 </script>

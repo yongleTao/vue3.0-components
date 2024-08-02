@@ -6,8 +6,8 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, ref, watch } from 'vue';
-import { treeProps, TreeNode, TreeOption, key, treeEmits } from './tree'
+import { computed, provide, ref, useSlots, watch } from 'vue';
+import { treeProps, TreeNode, TreeOption, key, treeEmits, treeInjectKey } from './tree'
 import { createNamespace } from '@zi-shui/utils/create';
 import zTreeNode from './treeNode.vue'
 defineOptions({
@@ -186,4 +186,7 @@ function hadleSelect(node: TreeNode) {
   }
   emit('update:sleectedKeys', keys)
 }
+provide(treeInjectKey, {
+  slots: useSlots()
+})
 </script>

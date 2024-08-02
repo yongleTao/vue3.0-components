@@ -1,4 +1,4 @@
-import { ExtractPropTypes, PropType } from 'vue'
+import { ExtractPropTypes, InjectionKey, PropType, SetupContext } from 'vue'
 
 type key = string | number
 
@@ -14,6 +14,7 @@ interface TreeOption {
   key?: key
   isLeaf: boolean
   children?: TreeOption[]
+  disabled?: boolean
   [key: string]: unknown // 任意接口
 }
 
@@ -82,6 +83,20 @@ const treeEmits = {
   'update:sleectedKeys': (keys: key[]) => keys
 }
 
+interface TreeContext {
+  slots: SetupContext['slots']
+  // emit: SetupContext<typeof treeEmits>['emit']
+}
+
+// 此变量作为提供出去的属性
+const treeNodeContentProps = {
+  node: {
+    type: Object as PropType<TreeNode>,
+    required: true
+  }
+}
+
+const treeInjectKey = Symbol() as InjectionKey<TreeContext>
 export {
   key,
   treeProps,
@@ -90,5 +105,8 @@ export {
   TreeNode,
   treeNodeProps,
   treeNodeEmitts,
-  treeEmits
+  treeEmits,
+  TreeContext,
+  treeInjectKey,
+  treeNodeContentProps
 }
