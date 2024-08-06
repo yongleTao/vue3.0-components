@@ -1,6 +1,5 @@
 @use 'mixins/mixins.scss' as *;
-
-@keyframes loading {
+@keyframes transform {
   from {
     transform: rotate(0deg);
   }
@@ -13,8 +12,7 @@
   height: 1em;
   width: 1em;
   vertical-align: middle;
-
   svg.loading {
-    animation: loading 1s linear infinite;
+    animation: transform 1s linear infinite;
   }
 }

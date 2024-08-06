@@ -9,6 +9,22 @@
   padding: 5px 0;
   font-size: 16px;
 
+  @include e('label') {
+  }
+  &:not(.is-disabled) {
+    .z-tree-node__label {
+      cursor: pointer;
+      display: flex;
+      flex: 1;
+    }
+  }
+  &.is-disabled {
+    .z-tree-node__label {
+      cursor: not-allowed;
+      display: flex;
+      flex: 1;
+    }
+  }
   &:hover {
     background: rgb(195, 195, 234);
   }
@@ -27,25 +43,10 @@
       cursor: default;
     }
   }
-
-  @include e(content) {
-    display: flex;
-  }
   @include when(selected) {
-    background-color: #e7f5ee;
+    background-color: aqua;
   }
-
-  &:not(.is-disabled) {
-    .z-tree-node__label {
-      cursor: pointer;
-      flex: 1;
-    }
-  }
-  &.is-disabled {
-    .z-tree-node__label {
-      cursor: not-allowed;
-      flex: 1;
-      color: #cdcdcd;
-    }
+  @include e('content') {
+    display: flex;
   }
 }

@@ -5,10 +5,12 @@ export default defineComponent({
   name: 'ZVirtualList',
   props: {
     size: {
+      // 每个元素的高度
       type: Number,
       default: 35
     },
     remain: {
+      // 展示的个数
       default: 8,
       type: Number
     },

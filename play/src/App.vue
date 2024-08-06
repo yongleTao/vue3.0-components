@@ -4,15 +4,23 @@
   </z-icon> -->
 
 
-  <z-tree :data="data" :onLoad="handleLoad" v-model:sleected-keys="value" selectable multiple>
+  <!-- <z-tree :data="data" :onLoad="handleLoad" v-model:sleected-keys="value" selectable multiple>
     <template #default="{ node }">{{ node.key }} {{ node.label }}</template>
-  </z-tree>
+</z-tree> -->
+
+  <z-button size="medium" type="danger" :round="true" :loading="true" :disabled="true">按钮
+    <template #icon>
+      <z-icon>
+        <Add></Add>
+      </z-icon>
+    </template>
+  </z-button>
 </template>
 
 <script setup lang='ts'>
 import { ref } from 'vue';
 import { TreeOption, key } from '@zi-shui/components/tree/src/tree'
-// import { Add } from '@vicons/ionicons5'
+import { Add } from '@vicons/ionicons5'
 defineOptions({
   name: "App"
 });
