@@ -8,13 +8,32 @@
     <template #default="{ node }">{{ node.key }} {{ node.label }}</template>
 </z-tree> -->
 
-  <z-button size="medium" type="danger" :round="true" :loading="true" :disabled="true">按钮
+  <!-- <z-button size="medium" type="danger" :round="true" :loading="true" :disabled="true">按钮
     <template #icon>
       <z-icon>
         <Add></Add>
       </z-icon>
     </template>
-  </z-button>
+  </z-button> -->
+  {{ userName }}
+  <z-input v-model="userName" :clearable="true">
+    <template #prepend>
+      首页
+    </template>
+    <template #prefixIcon>
+      <z-icon>
+        <Add></Add>
+      </z-icon>
+    </template>
+    <template #sufixIcon>
+      <z-icon>
+        <Add></Add>
+      </z-icon>
+    </template>
+    <template #append>
+      直播
+    </template>
+  </z-input>
 </template>
 
 <script setup lang='ts'>
@@ -24,6 +43,7 @@ import { Add } from '@vicons/ionicons5'
 defineOptions({
   name: "App"
 });
+const userName = ref('张三')
 function createData(level = 4, parentKey = ''): any {
   if (!level) return []
   const arr = new Array(20 - level).fill(0)

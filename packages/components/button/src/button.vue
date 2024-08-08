@@ -46,7 +46,6 @@ defineOptions({
 const props = defineProps(buttonProps);
 const emit = defineEmits(buttonEmits);
 const slots = useSlots()
-
 const emitClick = (e: MouseEvent) => {
   emit('click', e)
 }
